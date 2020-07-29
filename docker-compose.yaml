@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:1.6.10
+    restart: always
+
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt:latest-dev
+    depends_on:
+      - mosquitto
+    restart: always
+    environment:
+      - TZ=Europe/Copenhagen
+      - DEBUG=zigbee-herdsman:deconz*
+    volumes:
+      - ./data:/app/data
+      - ./configuration.yaml:/app/data/configuration.yaml
+    devices:
+      - /dev/ttyS0
